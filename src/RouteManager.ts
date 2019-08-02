@@ -22,7 +22,7 @@ const stripPostfix = (str: string, postfix: string) => str.endsWith(postfix)
 
 class RouteManager {
   private isBuilt: boolean = false;
-  private router: koaTreeRouter;
+  public router: koaTreeRouter;
   private routes: IManagedRoute[] = [];
 
   constructor(opts?: IRouteManagerOpts) {

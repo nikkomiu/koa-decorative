@@ -12,6 +12,17 @@ Install Koa Decorative using `npm`:
 npm install --save koa-decorative
 ```
 
+This package requires that you enable experimental decorators in your `tsconfig.json` file for your project:
+
+```json
+{
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  }
+}
+```
+
 ## Usage
 
 ### index.ts

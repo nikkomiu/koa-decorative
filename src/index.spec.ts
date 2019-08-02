@@ -2,6 +2,7 @@ import * as index from './index';
 
 describe('index.ts', () => {
   it('exports functions', () => {
+    // Arrange
     const expectedExports = [
       '__esModule', 'defaultRouteManager',
       'Pre', 'Route', 'Controller',
@@ -9,6 +10,7 @@ describe('index.ts', () => {
       'default',
     ];
 
+    // Assert
     expect(Object.getOwnPropertyNames(index)).toEqual(expectedExports);
   });
 });
