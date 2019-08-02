@@ -10,7 +10,8 @@
   },
   "scripts": {
     "tsc": "tsc",
-    "lint": "tslint --project ."
+    "lint": "tslint --project .",
+    "test": "jest --config jest.config.json"
   },
   "keywords": [
     "koa",
@@ -29,7 +30,11 @@
   },
   "homepage": "https://gitlab.com/nikko.miu/koa-decorative#readme",
   "devDependencies": {
+    "@types/jest": "^24.0.16",
+    "jest": "^24.8.0",
+    "jest-simple-summary": "^1.0.2",
     "koa-tree-router": "^0.5.0",
+    "ts-jest": "^24.0.2",
     "tslint": "^5.18.0",
     "tslint-config-airbnb": "^5.11.1",
     "typescript": "^3.5.3"

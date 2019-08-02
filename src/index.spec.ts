@@ -1,0 +1,14 @@
+import * as index from './index';
+
+describe('index.ts', () => {
+  it('exports functions', () => {
+    const expectedExports = [
+      '__esModule', 'defaultRouteManager',
+      'Pre', 'Route', 'Controller',
+      'All', 'Head', 'Get', 'Post', 'Put', 'Patch', 'Delete', 'Options',
+      'default',
+    ];
+
+    expect(Object.getOwnPropertyNames(index)).toEqual(expectedExports);
+  });
+});
