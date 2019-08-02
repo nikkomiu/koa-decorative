@@ -1,0 +1,40 @@
+{
+  "name": "koa-decorative",
+  "version": "0.0.0-alpha",
+  "description": "Koa Decorator Based Routing",
+  "main": "src/index.ts",
+  "module": "src/index.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/nikko.miu/koa-decorative.git"
+  },
+  "scripts": {
+    "tsc": "tsc",
+    "lint": "tslint --project ."
+  },
+  "keywords": [
+    "koa",
+    "router",
+    "koa router",
+    "decorator",
+    "decorator routing",
+    "typescript",
+    "typescript router",
+    "simple router"
+  ],
+  "author": "Nikko Miu <nikkoamiu@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://gitlab.com/nikko.miu/koa-decorative/issues"
+  },
+  "homepage": "https://gitlab.com/nikko.miu/koa-decorative#readme",
+  "devDependencies": {
+    "koa-tree-router": "^0.5.0",
+    "tslint": "^5.18.0",
+    "tslint-config-airbnb": "^5.11.1",
+    "typescript": "^3.5.3"
+  },
+  "peerDependencies": {
+    "koa-tree-router": "^0.5.0"
+  }
+}
