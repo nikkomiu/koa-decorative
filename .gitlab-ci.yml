@@ -29,6 +29,8 @@ deploy version:
   before_script:
     - echo $NPMRC > ./.npmrc
   script:
+    - npm install
+    - npm tsc
     - 'sed -ie "s/\"version\": \"[0-9]\{1,10\}\.[0-9]\{1,10\}\.[0-9]\{1,10\}\(-\(alpha\|beta\)\{1\}\)\{0,1\}\"/\"version\": \"$CI_COMMIT_TAG\"/g" package.json'
     - npm publish
   only:
