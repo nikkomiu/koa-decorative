@@ -2,8 +2,8 @@
   "name": "koa-decorative",
   "version": "0.0.0-alpha",
   "description": "Koa Decorator Based Routing",
-  "main": "dist/index.ts",
-  "module": "dist/index.ts",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
