@@ -50,7 +50,7 @@ class RouteManager {
 
   controller = (routePrefix?: string): ClassDecorator => <TFunction extends Function>(target: TFunction) => {
     let prefix = stripPrefix(stripPostfix(routePrefix || '', '/'), '/').toLowerCase();
-    if (prefix.length) { prefix = '/' + prefix; }
+    if (prefix.length) { prefix = `/${prefix}`; }
 
     const original = target;
 
