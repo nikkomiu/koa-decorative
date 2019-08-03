@@ -64,7 +64,6 @@ class RouteManager {
       const buildRoutes = (target: Object): IManagedRoute[] => (Reflect.getMetadata(controllerRoutingKey, target) || []).map((route: IManagedRoute) => {
         const path = stripPostfix(route.path.startsWith('/') ? `${prefix}${route.path}` : `${prefix}/${route.path}`, '/');
 
-        // TODO: Only bind actual handler not pre-handlers
         // TODO: Add option to bind pre handlers to bind context
         const handlers = route.handlers.map((h, i, a) => (i === a.length - 1) ? h.bind(ic) : h);
 
