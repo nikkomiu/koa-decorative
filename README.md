@@ -6,10 +6,10 @@ a routing configuration file.
 
 ## Installation
 
-Install Koa Decorative using `npm`:
+Install Koa Decorative and the underlying router that Koa Decorative works with using `npm`:
 
 ```bash
-npm install --save koa-decorative
+npm install --save koa-decorative koa-tree-router
 ```
 
 This package requires that you enable experimental decorators in your `tsconfig.json` file for your project:
