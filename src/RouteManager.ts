@@ -17,7 +17,11 @@ export interface IRouteManagerOpts {
 }
 
 const stripPostfix = (str: string, postfix: string) => str.endsWith(postfix)
-  ? str.substr(0, str.length - 1)
+  ? str.substr(0, str.length - postfix.length)
+  : str;
+
+const stripPrefix = (str: string, prefix: string) => str.startsWith(prefix)
+  ? str.substr(prefix.length, str.length)
   : str;
 
 class RouteManager {
@@ -45,7 +49,8 @@ class RouteManager {
   }
 
   controller = (routePrefix?: string): ClassDecorator => <TFunction extends Function>(target: TFunction) => {
-    const prefix = stripPostfix(routePrefix || '', '/').toLowerCase();
+    let prefix = stripPrefix(stripPostfix(routePrefix || '', '/'), '/').toLowerCase();
+    if (prefix.length) { prefix = '/' + prefix; }
 
     const original = target;
 
@@ -57,12 +62,11 @@ class RouteManager {
       const ic = new ctrl();
 
       const buildRoutes = (target: Object): IManagedRoute[] => (Reflect.getMetadata(controllerRoutingKey, target) || []).map((route: IManagedRoute) => {
-        if (!route.handlers || !route.handlers.length) { return; }
         const path = stripPostfix(route.path.startsWith('/') ? `${prefix}${route.path}` : `${prefix}/${route.path}`, '/');
 
         // TODO: Only bind actual handler not pre-handlers
         // TODO: Add option to bind pre handlers to bind context
-        const handlers = route.handlers.map(h => h.bind(ic));
+        const handlers = route.handlers.map((h, i, a) => (i === a.length - 1) ? h.bind(ic) : h);
 
         return { path, handlers, verb: route.verb };
       });

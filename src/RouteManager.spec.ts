@@ -1,6 +1,6 @@
 import koaTreeRouter from 'koa-tree-router';
 
-import RouteManager, { IManagedRoute } from './RouteManager';
+import RouteManager, { IManagedRoute, RouteVerb } from './RouteManager';
 
 describe('RouteManager init', () => {
   it('can be constructed without params', () => {
@@ -40,7 +40,7 @@ describe('RouteManager instance', () => {
     jest.spyOn(router, 'get');
     jest.spyOn(router, 'post');
 
-    routeManager = new RouteManager();
+    routeManager = new RouteManager({ router });
   });
 
   it('can register routes', () => {
@@ -76,4 +76,94 @@ describe('RouteManager instance', () => {
     expect(router.get).toHaveBeenCalledTimes(1);
     expect(router.post).toHaveBeenCalledTimes(1);
   });
+});
+
+describe('RouteManager decorators', () => {
+  const buildController = (routeManager: RouteManager) => (verb: RouteVerb, path: string, prefix?: string, preHandler?: any) => {
+    const d = routeManager[verb];
+
+    @routeManager.controller(prefix)
+    // @ts-ignore
+    class Test {
+      @d(path)
+      // @ts-ignore
+      list() { }
+
+      @d(path)
+      @routeManager.pre(preHandler)
+      // @ts-ignore
+      preDid() {}
+    }
+
+    return Test;
+  }
+
+  let routeManager: RouteManager;
+  let readyController: (verb: RouteVerb, path: string, prefix?: string, preHandler?: any) => any;
+
+  beforeEach(() => {
+    routeManager = new RouteManager();
+
+    readyController = buildController(routeManager);
+  });
+
+  it('can attach a pre handler to a request', () => {
+    // Arrange
+    const expectedVerb = 'get';
+    const expectedPath = '/test';
+    const preHandlers = () => {};
+    const ctrl = readyController(expectedVerb, expectedPath, undefined, preHandlers);
+
+    // Act
+    new ctrl();
+
+    // Assert
+    const { verb, path, handlers } = (routeManager as any).routes[1];
+    expect(verb).toEqual(expectedVerb);
+    expect(path).toEqual(expectedPath);
+    expect(handlers.length).toEqual(2);
+    expect(handlers[0]).toBe(preHandlers);
+  });
+
+  it('can attach multiple pre handlers to a request', () => {
+    // Arrange
+    const expectedVerb = 'get';
+    const expectedPath = '/test';
+    const preHandlers = [() => {}, () => {}];
+    const ctrl = readyController(expectedVerb, expectedPath, undefined, preHandlers);
+
+    // Act
+    new ctrl();
+
+    // Assert
+    const { verb, path, handlers } = (routeManager as any).routes[1];
+    expect(verb).toEqual(expectedVerb);
+    expect(path).toEqual(expectedPath);
+    expect(handlers.length).toEqual(3);
+    expect(handlers[0]).toBe(preHandlers[0]);
+    expect(handlers[1]).toBe(preHandlers[1]);
+  });
+
+  [
+    { verb: 'head', path: '/test' },
+    { verb: 'get', path: '/test' },
+    { verb: 'post', path: '/test' },
+    { verb: 'put', path: '/test' },
+    { verb: 'patch', path: '/test' },
+    { verb: 'delete', path: '/test' },
+    { verb: 'all', path: 'test', prefix: 'some', expectedPath: '/some/test' },
+    { verb: 'options', path: '/test/', prefix: '/some/', expectedPath: '/some/test' },
+  ].forEach(test => it(`creates ${test.verb} route for path "${test.path}" controller with ${test.prefix || 'no'} prefix`, () => {
+    // Arrange
+    const ctrl = readyController(test.verb as any, test.path, test.prefix);
+
+    // Act
+    new ctrl();
+
+    // Assert
+    const { verb, path, handlers } = (routeManager as any).routes[0];
+    expect(verb).toEqual(test.verb);
+    expect(path).toEqual(test.expectedPath || test.path);
+    expect(handlers.length).toEqual(1);
+  }));
 });
