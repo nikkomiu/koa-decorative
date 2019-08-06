@@ -79,7 +79,7 @@ describe('RouteManager instance', () => {
 });
 
 describe('RouteManager decorators', () => {
-  const buildController = (routeManager: RouteManager) => (verb: RouteVerb, path: string, prefix?: string, preHandler?: any) => {
+  const buildController = (routeManager: RouteManager) => (verb: RouteVerb, path?: string, prefix?: string, preHandler?: any) => {
     const d = routeManager[verb];
 
     @routeManager.controller(prefix)
@@ -99,7 +99,7 @@ describe('RouteManager decorators', () => {
   }
 
   let routeManager: RouteManager;
-  let readyController: (verb: RouteVerb, path: string, prefix?: string, preHandler?: any) => any;
+  let readyController: (verb: RouteVerb, path?: string, prefix?: string, preHandler?: any) => any;
 
   beforeEach(() => {
     routeManager = new RouteManager();
@@ -145,7 +145,9 @@ describe('RouteManager decorators', () => {
   });
 
   [
+    { verb: 'head', expectedPath: '/' },
     { verb: 'head', path: '/test' },
+    { verb: 'get', expectedPath: '/' },
     { verb: 'get', path: '/test' },
     { verb: 'post', path: '/test' },
     { verb: 'put', path: '/test' },
