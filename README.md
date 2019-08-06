@@ -44,7 +44,7 @@ const preListAction = async (ctx: Context, next: () => Promise<any>) => {
 class SimpleController {
   constructor(private simpleService) { }
 
-  @Get('/')
+  @Get()
   @Pre(preListAction)
   list(ctx: Context) {
     const result = this.simpleService.list();
@@ -52,7 +52,7 @@ class SimpleController {
     ctx.body = { data: result };
   }
 
-  @Post('/')
+  @Post()
   create(ctx: Context) {
     const result = this.simpleService.create();
 
@@ -103,13 +103,13 @@ new SimpleController(simpleService);
 Then just build the routes in your apps main `index.ts` or `app.ts` file:
 
 ```ts
-import { defaultRouteManager } from 'koa-decorative';
+import { buildRoutes } from 'koa-decorative';
 
 import './controllers';
 
 const app = new Koa();
 
-app.use(defaultRouteManager.build());
+app.use(buildRoutes());
 
 app.listen(3000);
 ```
