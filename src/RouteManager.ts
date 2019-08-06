@@ -67,7 +67,7 @@ class RouteManager {
         // TODO: Add option to bind pre handlers to bind context
         const handlers = route.handlers.map((h, i, a) => (i === a.length - 1) ? h.bind(ic) : h);
 
-        return { path, handlers, verb: route.verb };
+        return { handlers, verb: route.verb, path: path || '/' };
       });
 
       this.registerRoutes(buildRoutes(constructor));
@@ -95,24 +95,24 @@ class RouteManager {
       target[key]);
   }
 
-  route = (verb: RouteVerb, path: string) => (target: any, key: string | symbol, descriptor: PropertyDescriptor) => {
+  route = (verb: RouteVerb, path?: string) => (target: any, key: string | symbol, descriptor: PropertyDescriptor) => {
     const preHandlers = Reflect.getMetadata(preHandlersKey, target[key]) || [];
     const currentHandlers = Reflect.getMetadata(controllerRoutingKey, target) || [];
 
     Reflect.defineMetadata(
       controllerRoutingKey,
-      [...currentHandlers, { verb, path, handlers: [...preHandlers, descriptor.value] }] as IManagedRoute[],
+      [...currentHandlers, { verb, path: path || '/', handlers: [...preHandlers, descriptor.value] }] as IManagedRoute[],
       target);
   }
 
-  all = (path: string) => this.route('all', path);
-  head = (path: string) => this.route('head', path);
-  get = (path: string) => this.route('get', path);
-  post = (path: string) => this.route('post', path);
-  put = (path: string) => this.route('put', path);
-  patch = (path: string) => this.route('patch', path);
-  delete = (path: string) => this.route('delete', path);
-  options = (path: string) => this.route('options', path);
+  all = (path?: string) => this.route('all', path);
+  head = (path?: string) => this.route('head', path);
+  get = (path?: string) => this.route('get', path);
+  post = (path?: string) => this.route('post', path);
+  put = (path?: string) => this.route('put', path);
+  patch = (path?: string) => this.route('patch', path);
+  delete = (path?: string) => this.route('delete', path);
+  options = (path?: string) => this.route('options', path);
 }
 
 export default RouteManager;
