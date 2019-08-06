@@ -153,6 +153,7 @@ describe('RouteManager decorators', () => {
     { verb: 'put', path: '/test' },
     { verb: 'patch', path: '/test' },
     { verb: 'delete', path: '/test' },
+    { verb: 'get', prefix: 'sweet', expectedPath: '/sweet' },
     { verb: 'all', path: 'test', prefix: 'some', expectedPath: '/some/test' },
     { verb: 'options', path: '/test/', prefix: '/some/', expectedPath: '/some/test' },
   ].forEach(test => it(`creates ${test.verb} route for path "${test.path}" controller with ${test.prefix || 'no'} prefix`, () => {
