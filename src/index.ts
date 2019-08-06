@@ -3,6 +3,8 @@ import RouteManager from './RouteManager';
 
 export const defaultRouteManager = new RouteManager();
 
+export const buildRoutes = defaultRouteManager.buildRoutes.bind(defaultRouteManager);
+
 export const Pre = defaultRouteManager.pre;
 export const Route = defaultRouteManager.route;
 export const Controller = defaultRouteManager.controller;

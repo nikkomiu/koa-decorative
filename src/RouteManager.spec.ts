@@ -56,7 +56,7 @@ describe('RouteManager instance', () => {
     routeManager.registerRoutes(routesToAdd);
 
     // Act
-    routeManager.build();
+    routeManager.buildRoutes();
 
     // Assert
     expect((routeManager as any).isBuilt).toBe(true);
@@ -67,10 +67,10 @@ describe('RouteManager instance', () => {
   it('does not rebuild the routes if build is called multiple times', () => {
     // Arrange
     routeManager.registerRoutes(routesToAdd);
-    routeManager.build();
+    routeManager.buildRoutes();
 
     // Act
-    routeManager.build();
+    routeManager.buildRoutes();
 
     // Assert
     expect(router.get).toHaveBeenCalledTimes(1);

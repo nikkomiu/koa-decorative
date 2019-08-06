@@ -4,7 +4,7 @@ describe('index.ts', () => {
   it('exports functions', () => {
     // Arrange
     const expectedExports = [
-      '__esModule', 'defaultRouteManager',
+      '__esModule', 'defaultRouteManager', 'buildRoutes',
       'Pre', 'Route', 'Controller',
       'All', 'Head', 'Get', 'Post', 'Put', 'Patch', 'Delete', 'Options',
       'default',

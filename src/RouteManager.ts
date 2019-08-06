@@ -39,7 +39,7 @@ class RouteManager {
     this.routes.push(...routes);
   }
 
-  build() {
+  buildRoutes() {
     if (!this.isBuilt) {
       this.routes.forEach(({ verb, path, handlers }) => this.router[verb](path, ...handlers));
       this.isBuilt = true;
