@@ -4,7 +4,6 @@ stages:
   - test
   - deploy
 
-
 .testing: &testing
   stage: test
   before_script:
@@ -18,11 +17,32 @@ unit test:
   <<: *testing
   script:
     - npm run test -- --color
+  artifacts:
+    paths:
+      - coverage/
+    expire_in: 1 week
 
 lint:
   <<: *testing
   script:
     - npm run lint
+
+build:
+  stage: deploy
+  before_script:
+    - npm install
+  script:
+    - npm run tsc
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+    - node_modules/
+  artifacts:
+    paths:
+      - dist/
+    expire_in: 1 month
+  except:
+    - tags
 
 deploy version:
   stage: deploy
