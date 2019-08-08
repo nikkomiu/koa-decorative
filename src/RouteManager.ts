@@ -1,38 +1,42 @@
 import 'reflect-metadata';
-import koaTreeRouter from 'koa-tree-router';
+import { Middleware } from 'koa';
+
+import { IRouteManagerOpts, IRouter, IManagedRoute, RouteVerb } from './constants';
+import { stripPostfix, stripPrefix } from './helpers';
 
 const controllerRoutingKey = Symbol('controllerRoutingKey');
 const preHandlersKey = Symbol('preHandlersKey');
 
-export type RouteVerb = 'all' | 'head' | 'get' | 'post' | 'put' | 'patch' | 'delete' | 'options';
+export const noUsableRouterError = new Error('no usable router found');
 
-export interface IManagedRoute {
-  verb: RouteVerb;
-  path: string;
-  handlers: koaTreeRouter.Middleware[];
-}
+export const pre = (handler: Middleware | Middleware[]): MethodDecorator => (target: any, key: string | symbol, descriptor: PropertyDescriptor) => {
+  const addtlHandlers = Array.isArray(handler) ? handler : [handler];
 
-export interface IRouteManagerOpts {
-  router?: koaTreeRouter;
-}
-
-const stripPostfix = (str: string, postfix: string) => str.endsWith(postfix)
-  ? str.substr(0, str.length - postfix.length)
-  : str;
-
-const stripPrefix = (str: string, prefix: string) => str.startsWith(prefix)
-  ? str.substr(prefix.length, str.length)
-  : str;
+  Reflect.defineMetadata(
+    preHandlersKey,
+    [...Reflect.getMetadata(preHandlersKey, target) || [], ...addtlHandlers],
+    target[key]);
+};
 
 class RouteManager {
   private isBuilt: boolean = false;
-  public router: koaTreeRouter;
+  public router: IRouter;
   private routes: IManagedRoute[] = [];
 
   constructor(opts?: IRouteManagerOpts) {
     const { router } = opts || {} as IRouteManagerOpts;
 
-    this.router = router || new koaTreeRouter();
+    if (router) {
+      this.router = router;
+    } else {
+      try {
+        const pkg = process.env.npm_package_config_koa_decorative_default_router || 'koa-tree-router';
+        const router = require(pkg);
+        this.router = new router();
+      } catch {
+        throw noUsableRouterError;
+      }
+    }
   }
 
   registerRoutes(routes: IManagedRoute[]) {
@@ -86,15 +90,6 @@ class RouteManager {
     return newConstructor;
   }
 
-  pre = (handler: koaTreeRouter.Middleware | koaTreeRouter.Middleware[]): MethodDecorator => (target: any, key: string | symbol, descriptor: PropertyDescriptor) => {
-    const addtlHandlers = Array.isArray(handler) ? handler : [handler];
-
-    Reflect.defineMetadata(
-      preHandlersKey,
-      [...Reflect.getMetadata(preHandlersKey, target) || [], ...addtlHandlers],
-      target[key]);
-  }
-
   route = (verb: RouteVerb, path?: string) => (target: any, key: string | symbol, descriptor: PropertyDescriptor) => {
     const preHandlers = Reflect.getMetadata(preHandlersKey, target[key]) || [];
     const currentHandlers = Reflect.getMetadata(controllerRoutingKey, target) || [];
@@ -106,13 +101,11 @@ class RouteManager {
   }
 
   all = (path?: string) => this.route('all', path);
-  head = (path?: string) => this.route('head', path);
   get = (path?: string) => this.route('get', path);
   post = (path?: string) => this.route('post', path);
   put = (path?: string) => this.route('put', path);
   patch = (path?: string) => this.route('patch', path);
   delete = (path?: string) => this.route('delete', path);
-  options = (path?: string) => this.route('options', path);
 }
 
 export default RouteManager;

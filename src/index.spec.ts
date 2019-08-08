@@ -6,7 +6,7 @@ describe('index.ts', () => {
     const expectedExports = [
       '__esModule', 'defaultRouteManager', 'buildRoutes',
       'Pre', 'Route', 'Controller',
-      'All', 'Head', 'Get', 'Post', 'Put', 'Patch', 'Delete', 'Options',
+      'All', 'Get', 'Post', 'Put', 'Patch', 'Delete',
       'default',
     ];
 
