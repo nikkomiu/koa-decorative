@@ -1,8 +1,13 @@
 import koaTreeRouter from 'koa-tree-router';
 
-import RouteManager, { IManagedRoute, RouteVerb } from './RouteManager';
+import { IManagedRoute, RouteVerb } from './constants';
+import RouteManager, { pre, noUsableRouterError } from './RouteManager';
 
 describe('RouteManager init', () => {
+  afterEach(() => {
+    process.env.npm_package_config_koa_decorative_default_router = '';
+  });
+
   it('can be constructed without params', () => {
     // Act
     const routeManager = new RouteManager();
@@ -23,6 +28,14 @@ describe('RouteManager init', () => {
 
     // Assert
     expect(routeManager.router).toBe(routerObj);
+  });
+
+  it('throws when no sutable router is found', () => {
+    // Arrange
+    process.env.npm_package_config_koa_decorative_default_router = 'invalid-router-pkg';
+
+    // Act
+    expect(() => new RouteManager()).toThrow(noUsableRouterError);
   });
 });
 
@@ -90,7 +103,7 @@ describe('RouteManager decorators', () => {
       list() { }
 
       @d(path)
-      @routeManager.pre(preHandler)
+      @pre(preHandler)
       // @ts-ignore
       preDid() {}
     }
@@ -145,17 +158,17 @@ describe('RouteManager decorators', () => {
   });
 
   [
-    { verb: 'head', expectedPath: '/' },
-    { verb: 'head', path: '/test' },
     { verb: 'get', expectedPath: '/' },
     { verb: 'get', path: '/test' },
+    { verb: 'get', prefix: '/something/', expectedPath: '/something' },
+    { verb: 'get', prefix: '/something', expectedPath: '/something' },
+    { verb: 'get', path: '/awesome/', prefix: '/something/', expectedPath: '/something/awesome' },
     { verb: 'post', path: '/test' },
     { verb: 'put', path: '/test' },
     { verb: 'patch', path: '/test' },
     { verb: 'delete', path: '/test' },
     { verb: 'get', prefix: 'sweet', expectedPath: '/sweet' },
     { verb: 'all', path: 'test', prefix: 'some', expectedPath: '/some/test' },
-    { verb: 'options', path: '/test/', prefix: '/some/', expectedPath: '/some/test' },
   ].forEach(test => it(`creates ${test.verb} route for path "${test.path}" controller with ${test.prefix || 'no'} prefix`, () => {
     // Arrange
     const ctrl = readyController(test.verb as any, test.path, test.prefix);
