@@ -1,7 +1,7 @@
 import koaTreeRouter from 'koa-tree-router';
 
-import { IManagedRoute, RouteVerb } from './constants';
-import RouteManager, { pre, noUsableRouterError } from './RouteManager';
+import { IManagedRoute, RouteVerb } from './types';
+import { RouteManager, Pre, noUsableRouterError } from './RouteManager';
 
 describe('RouteManager init', () => {
   afterEach(() => {
@@ -103,13 +103,13 @@ describe('RouteManager decorators', () => {
       list() { }
 
       @d(path)
-      @pre(preHandler)
+      @Pre(preHandler)
       // @ts-ignore
       preDid() {}
     }
 
     return Test;
-  }
+  };
 
   let routeManager: RouteManager;
   let readyController: (verb: RouteVerb, path?: string, prefix?: string, preHandler?: any) => any;

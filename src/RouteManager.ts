@@ -1,15 +1,23 @@
 import 'reflect-metadata';
 import { Middleware } from 'koa';
 
-import { IRouteManagerOpts, IRouter, IManagedRoute, RouteVerb } from './constants';
-import { stripPostfix, stripPrefix } from './helpers';
+import { IRouteManagerOpts, IRouter, IManagedRoute, RouteVerb } from './types';
 
 const controllerRoutingKey = Symbol('controllerRoutingKey');
 const preHandlersKey = Symbol('preHandlersKey');
 
 export const noUsableRouterError = new Error('no usable router found');
 
-export const pre = (handler: Middleware | Middleware[]): MethodDecorator => (target: any, key: string | symbol, descriptor: PropertyDescriptor) => {
+const stripPostfix = (str: string, postfix: string) => str.endsWith(postfix)
+  ? str.substr(0, str.length - postfix.length)
+  : str;
+
+const stripPrefix = (str: string, prefix: string) => str.startsWith(prefix)
+  ? str.substr(prefix.length, str.length)
+  : str;
+
+/* tslint:disable:variable-name */
+export const Pre = (handler: Middleware | Middleware[]): MethodDecorator => (target: any, key: string | symbol, descriptor: PropertyDescriptor) => {
   const addtlHandlers = Array.isArray(handler) ? handler : [handler];
 
   Reflect.defineMetadata(
@@ -18,7 +26,7 @@ export const pre = (handler: Middleware | Middleware[]): MethodDecorator => (tar
     target[key]);
 };
 
-class RouteManager {
+export class RouteManager {
   private isBuilt: boolean = false;
   public router: IRouter;
   private routes: IManagedRoute[] = [];
@@ -107,5 +115,3 @@ class RouteManager {
   patch = (path?: string) => this.route('patch', path);
   delete = (path?: string) => this.route('delete', path);
 }
-
-export default RouteManager;

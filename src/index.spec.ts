@@ -4,10 +4,9 @@ describe('index.ts', () => {
   it('exports functions', () => {
     // Arrange
     const expectedExports = [
-      '__esModule', 'defaultRouteManager', 'buildRoutes',
-      'Pre', 'Route', 'Controller',
+      '__esModule', 'RouteManager', 'Pre', 'noUsableRouterError', 'defaultRouteManager', 'buildRoutes',
+      'Route', 'Controller',
       'All', 'Get', 'Post', 'Put', 'Patch', 'Delete',
-      'default',
     ];
 
     // Assert
