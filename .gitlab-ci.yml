@@ -33,6 +33,7 @@ build:
     - npm install
   script:
     - npm run tsc
+    - cp LICENSE README.md package*.json dist/
   cache:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
