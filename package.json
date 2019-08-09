@@ -2,9 +2,9 @@
   "name": "koa-decorative",
   "version": "0.0.0-alpha",
   "description": "Koa Decorator Based Routing",
-  "main": "dist/index.js",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "index.js",
+  "module": "index.js",
+  "types": "index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://gitlab.com/nikko.miu/koa-decorative.git"
@@ -14,9 +14,6 @@
     "lint": "tslint --project .",
     "test": "jest --config jest.config.json"
   },
-  "files": [
-    "dist"
-  ],
   "keywords": [
     "koa",
     "router",
