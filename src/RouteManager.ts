@@ -22,7 +22,7 @@ export const Pre = (handler: Middleware | Middleware[]): MethodDecorator => (tar
 
   Reflect.defineMetadata(
     preHandlersKey,
-    [...Reflect.getMetadata(preHandlersKey, target) || [], ...addtlHandlers],
+    [...Reflect.getMetadata(preHandlersKey, target[key]) || [], ...addtlHandlers],
     target[key]);
 };
 
