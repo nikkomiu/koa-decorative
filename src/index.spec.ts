@@ -6,7 +6,7 @@ describe('index.ts', () => {
     const expectedExports = [
       '__esModule', 'RouteManager', 'Pre', 'noUsableRouterError', 'defaultRouteManager', 'buildRoutes',
       'Route', 'Controller',
-      'All', 'Get', 'Post', 'Put', 'Patch', 'Delete',
+      'All', 'Head', 'Get', 'Post', 'Put', 'Patch', 'Delete',
     ];
 
     // Assert
