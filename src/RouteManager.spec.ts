@@ -163,6 +163,7 @@ describe('RouteManager decorators', () => {
     { verb: 'get', prefix: '/something/', expectedPath: '/something' },
     { verb: 'get', prefix: '/something', expectedPath: '/something' },
     { verb: 'get', path: '/awesome/', prefix: '/something/', expectedPath: '/something/awesome' },
+    { verb: 'head', path: '/test' },
     { verb: 'post', path: '/test' },
     { verb: 'put', path: '/test' },
     { verb: 'patch', path: '/test' },

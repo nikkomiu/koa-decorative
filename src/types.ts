@@ -1,9 +1,10 @@
 import { Middleware } from 'koa';
 
-export type RouteVerb = 'all' | 'get' | 'post' | 'put' | 'patch' | 'delete';
+export type RouteVerb = 'all' | 'head' | 'get' | 'post' | 'put' | 'patch' | 'delete';
 
 export interface IRouter {
   all(path: string, ...middleware: Middleware[]): void;
+  head(path: string, ...middleware: Middleware[]): void;
   get(path: string, ...middleware: Middleware[]): void;
   post(path: string, ...middleware: Middleware[]): void;
   put(path: string, ...middleware: Middleware[]): void;

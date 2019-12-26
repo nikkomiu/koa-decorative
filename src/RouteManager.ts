@@ -109,6 +109,7 @@ export class RouteManager {
   }
 
   all = (path?: string) => this.route('all', path);
+  head = (path?: string) => this.route('head', path);
   get = (path?: string) => this.route('get', path);
   post = (path?: string) => this.route('post', path);
   put = (path?: string) => this.route('put', path);
